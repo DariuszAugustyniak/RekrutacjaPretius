@@ -13,8 +13,6 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 public class main {
 
 
-
-
     public static void main(String[] args) {
         Integer all = 0;
         Integer intoDev = 0;
@@ -30,48 +28,47 @@ public class main {
             Files.createDirectories(home);
             Files.createDirectories(test);
             Files.createDirectories(dev);
-            count = new File ("./HOME/count.txt");
+            count = new File("./HOME/count.txt");
             count.createNewFile();
 
 
             WatchService homeWatcher = FileSystems.getDefault().newWatchService();
-            home.register(homeWatcher,ENTRY_CREATE);
+            home.register(homeWatcher, ENTRY_CREATE);
             WatchKey key;
             while ((key = homeWatcher.take()) != null) {
                 for (WatchEvent<?> event : key.pollEvents()) {
 
-                    WatchEvent<Path> ev = (WatchEvent<Path>)event;
+                    WatchEvent<Path> ev = (WatchEvent<Path>) event;
                     Path filename = ev.context();
 
 
-
-                    if(FilenameUtils.getExtension(filename.toString()).equals("xml")){
+                    if (FilenameUtils.getExtension(filename.toString()).equals("xml")) {
 
                         Path source = home.resolve(filename);
                         Path target = dev.resolve(filename);
                         Files.move(source, target, REPLACE_EXISTING);
                         String fileData = "All " + ++all + " Dev " + ++intoDev + " Test " + intoTest;
-                        Files.write(Paths.get(count.getPath()),fileData.getBytes());
+                        Files.write(Paths.get(count.getPath()), fileData.getBytes());
 
                     }
-                    if(FilenameUtils.getExtension(filename.toString()).equals("jar")){
+                    if (FilenameUtils.getExtension(filename.toString()).equals("jar")) {
 
 
                         Path source = home.resolve(filename);
                         FileTime time = Files.getLastModifiedTime(source);
 
-                        if(time.toMillis()%2==0){
+                        if (time.toMillis() % 2 == 0) {
                             Path target = dev.resolve(filename);
                             Files.move(source, target, REPLACE_EXISTING);
 
                             String fileData = "All " + ++all + " Dev " + ++intoDev + " Test " + intoTest;
-                            Files.write(Paths.get(count.getPath()),fileData.getBytes());
-                        }else{
+                            Files.write(Paths.get(count.getPath()), fileData.getBytes());
+                        } else {
                             Path target = test.resolve(filename);
                             Files.move(source, target, REPLACE_EXISTING);
 
                             String fileData = "All " + ++all + " Dev " + intoDev + " Test " + ++intoTest;
-                            Files.write(Paths.get(count.getPath()),fileData.getBytes());
+                            Files.write(Paths.get(count.getPath()), fileData.getBytes());
                         }
 
                     }
@@ -81,7 +78,7 @@ public class main {
                 key.reset();
             }
 
-        }catch (IOException e){
+        } catch (IOException e) {
 
         } catch (InterruptedException e) {
             e.printStackTrace();
