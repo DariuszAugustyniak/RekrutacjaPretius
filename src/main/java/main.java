@@ -59,7 +59,7 @@ public class main {
                        // System.out.println("zgadza sie jar");
                         Path source = home.resolve(filename);
                         FileTime time = Files.getLastModifiedTime(source);
-                        System.out.println(time.toMillis());
+                        //System.out.println(time.toMillis());
                         if(time.toMillis()%2==0){
                             Path target = dev.resolve(filename);
                             Files.move(source, target, REPLACE_EXISTING);
