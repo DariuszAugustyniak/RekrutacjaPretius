@@ -16,9 +16,9 @@ public class main {
 
 
     public static void main(String[] args) {
-        Integer wszystkie = 0;
-        Integer doDev = 0;
-        Integer doTest = 0;
+        Integer all = 0;
+        Integer intoDev = 0;
+        Integer intoTest = 0;
 
         Path home = Paths.get("./HOME");
         Path test = Paths.get("./TEST");
@@ -43,34 +43,34 @@ public class main {
                     WatchEvent<Path> ev = (WatchEvent<Path>)event;
                     Path filename = ev.context();
 
-                    //System.out.println("File affected: " + event.context() + "." + " Extention" + FilenameUtils.getExtension(filename.toString()));
+
 
                     if(FilenameUtils.getExtension(filename.toString()).equals("xml")){
-                        //System.out.println("zgadza sie xml");
+
                         Path source = home.resolve(filename);
                         Path target = dev.resolve(filename);
                         Files.move(source, target, REPLACE_EXISTING);
-                        String fileData = "All " + ++wszystkie + " Dev " + ++doDev + " Test " + doTest;
+                        String fileData = "All " + ++all + " Dev " + ++intoDev + " Test " + intoTest;
                         Files.write(Paths.get(count.getPath()),fileData.getBytes());
 
                     }
                     if(FilenameUtils.getExtension(filename.toString()).equals("jar")){
 
-                       // System.out.println("zgadza sie jar");
+
                         Path source = home.resolve(filename);
                         FileTime time = Files.getLastModifiedTime(source);
-                        //System.out.println(time.toMillis());
+
                         if(time.toMillis()%2==0){
                             Path target = dev.resolve(filename);
                             Files.move(source, target, REPLACE_EXISTING);
-                           // System.out.println("do dev");
-                            String fileData = "All " + ++wszystkie + " Dev " + ++doDev + " Test " + doTest;
+
+                            String fileData = "All " + ++all + " Dev " + ++intoDev + " Test " + intoTest;
                             Files.write(Paths.get(count.getPath()),fileData.getBytes());
                         }else{
                             Path target = test.resolve(filename);
                             Files.move(source, target, REPLACE_EXISTING);
-                           // System.out.println("do test");
-                            String fileData = "All " + ++wszystkie + " Dev " + doDev + " Test " + ++doTest;
+
+                            String fileData = "All " + ++all + " Dev " + intoDev + " Test " + ++intoTest;
                             Files.write(Paths.get(count.getPath()),fileData.getBytes());
                         }
 
